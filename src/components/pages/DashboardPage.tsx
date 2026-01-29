@@ -6,10 +6,13 @@ import { Link } from 'react-router-dom';
 import { CheckCircle, Circle, GraduationCap, Target, FileText, Send } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import TaskManager from '@/components/TaskManager';
 import { motion } from 'framer-motion';
+import { useTaskStore } from '@/stores/taskStore';
 
 export default function DashboardPage() {
   const { member } = useMember();
+  const { tasks, getCompletedCount, getTotalCount, getProgressPercentage } = useTaskStore();
   
   // Get onboarding data from localStorage
   const onboardingData = JSON.parse(localStorage.getItem('onboardingData') || '{}');
@@ -25,6 +28,11 @@ export default function DashboardPage() {
   const currentStage = stages.find(s => s.status === 'in-progress') || stages[0];
   const completedStages = stages.filter(s => s.status === 'completed').length;
   const progressPercentage = (completedStages / stages.length) * 100;
+  
+  // Task progress
+  const completedTasks = getCompletedCount();
+  const totalTasks = getTotalCount();
+  const taskProgressPercentage = getProgressPercentage();
 
   return (
     <div className="min-h-screen bg-background">
@@ -69,6 +77,32 @@ export default function DashboardPage() {
             </div>
           </Card>
         </motion.div>
+
+        {/* Task Progress Overview */}
+        {totalTasks > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+          >
+            <Card className="p-8 border-mutedgreen/20 bg-mutedgreen/5">
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <h2 className="font-heading text-2xl text-primary">
+                    Task Completion
+                  </h2>
+                  <span className="font-paragraph text-lg text-secondary">
+                    {completedTasks} of {totalTasks} tasks completed
+                  </span>
+                </div>
+                <Progress value={taskProgressPercentage} className="h-3" />
+                <p className="font-paragraph text-base text-secondary">
+                  Keep completing your actionable to-dos to stay on track with your application.
+                </p>
+              </div>
+            </Card>
+          </motion.div>
+        )}
 
         {/* Stages Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -211,6 +245,24 @@ export default function DashboardPage() {
             </Card>
           </motion.div>
         </div>
+
+        {/* Active Tasks Section */}
+        {totalTasks > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+          >
+            <Card className="p-8 border-primary/20">
+              <TaskManager showHeader={true} compact={true} />
+              <Link to="/guidance" className="block mt-6">
+                <Button variant="outline" className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+                  View All Tasks & Guidance
+                </Button>
+              </Link>
+            </Card>
+          </motion.div>
+        )}
       </div>
 
       <Footer />

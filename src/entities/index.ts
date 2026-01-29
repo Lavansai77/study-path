@@ -25,6 +25,31 @@ export interface ApplicationGuidance {
 
 
 /**
+ * Collection ID: applicationtasks
+ * Interface for ApplicationTasks
+ */
+export interface ApplicationTasks {
+  _id: string;
+  _createdDate?: Date;
+  _updatedDate?: Date;
+  /** @wixFieldType text */
+  applicationGuidanceId?: string;
+  /** @wixFieldType text */
+  taskTitle?: string;
+  /** @wixFieldType text */
+  description?: string;
+  /** @wixFieldType date */
+  dueDate?: Date | string;
+  /** @wixFieldType number */
+  estimatedEffort?: number;
+  /** @wixFieldType boolean */
+  isOptional?: boolean;
+  /** @wixFieldType url */
+  resourceLink?: string;
+}
+
+
+/**
  * Collection ID: universities
  * Interface for Universities
  */

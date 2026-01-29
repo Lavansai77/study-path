@@ -6,6 +6,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { CheckCircle, Circle } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import TaskManager from '@/components/TaskManager';
 import { motion } from 'framer-motion';
 
 export default function GuidancePage() {
@@ -130,6 +131,14 @@ export default function GuidancePage() {
                                 </div>
                               </div>
                             )}
+
+                            {/* Tasks for this stage */}
+                            <div className="mt-4 pt-4 border-t border-primary/10">
+                              <h4 className="font-paragraph text-base font-medium text-foreground mb-3">
+                                Related Tasks
+                              </h4>
+                              <TaskManager showHeader={false} stageFilter={stage} compact={true} />
+                            </div>
                           </div>
                         </AccordionContent>
                       </AccordionItem>
